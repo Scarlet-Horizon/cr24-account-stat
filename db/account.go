@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"log"
 	"main/model"
-	"main/request"
 	"time"
 )
 
@@ -12,7 +11,7 @@ type AccountDB struct {
 	DB *sql.DB
 }
 
-func (receiver AccountDB) Create(account request.Account) error {
+func (receiver AccountDB) Create(account model.Account) error {
 	stmt, err := receiver.DB.Prepare("DELETE FROM account;")
 	if err != nil {
 		return err
@@ -30,7 +29,7 @@ func (receiver AccountDB) Create(account request.Account) error {
 
 	stmt, err = receiver.DB.Prepare("INSERT INTO account VALUES (?, ?, ?, ?);")
 
-	_, err = stmt.Exec(account.PK, account.SK, time.Now().Format("2006-01-02 15:04:05"), account.Type)
+	_, err = stmt.Exec(account.PK, account.SK, account.OpenDate.Format("2006-01-02 15:04:05"), account.Type)
 	return err
 }
 

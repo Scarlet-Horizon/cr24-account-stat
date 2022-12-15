@@ -1,16 +1,20 @@
 package response
 
 type ErrorResponse struct {
-	// Error description.
+	// Error description
 	Error string `json:"error" example:"invalid endpoint"`
-} //@name ErrorResponse
+} //	@name	ErrorResponse
 
 type EndpointLast struct {
-	Name    string `json:"name" example:"api/v1/account"`
+	// Endpoint path
+	Name string `json:"name" example:"api/v1/account"`
+	// Access date
 	Visited string `json:"visited" example:"2022-12-15 13:17:25"`
-}
+} //	@name	EndpointLast
 
 type EndpointStat struct {
-	Name  string `json:"name" example:"api/v1/account"`
-	Count int    `json:"count" example:"5"`
-}
+	// Endpoint path
+	Name string `json:"name" example:"api/v1/account"`
+	// How many times was the endpoint accessed
+	Count int `json:"count" example:"5"`
+} //	@name	EndpointStat

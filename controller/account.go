@@ -3,8 +3,8 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 	"main/db"
+	"main/model"
 	_ "main/model"
-	"main/request"
 	"main/response"
 	"net/http"
 )
@@ -18,7 +18,7 @@ type AccountController struct {
 //	@accept			json
 //	@produce		json
 //	@tags			account
-//	@param			requestBody	body	request.Account	true	"Account data"
+//	@param			requestBody	body	model.Account	true	"Account data"
 //	@success		204			"No Content"
 //	@failure		400			{object}	response.ErrorResponse
 //	@failure		500			{object}	response.ErrorResponse
@@ -26,7 +26,7 @@ type AccountController struct {
 //	@param			Authorization	header	string	true	"Authorization"
 //	@router			/account [POST]
 func (receiver AccountController) Create(ctx *gin.Context) {
-	var account request.Account
+	var account model.Account
 	if err := ctx.ShouldBindJSON(&account); err != nil {
 		ctx.JSON(http.StatusBadRequest, response.ErrorResponse{Error: err.Error()})
 		return
