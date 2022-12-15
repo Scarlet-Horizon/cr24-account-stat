@@ -2,7 +2,6 @@ package db
 
 import (
 	"database/sql"
-	"errors"
 	"log"
 	"main/request"
 	"main/response"
@@ -14,7 +13,6 @@ type StatDB struct {
 }
 
 func (receiver StatDB) CreateStat(statRequest request.StatRequest) error {
-	// TODO create own endpoint db model
 	stmt, err := receiver.DB.Prepare("SELECT id_endpoint FROM endpoint WHERE name = ?;")
 	if err != nil {
 		return err
@@ -28,10 +26,6 @@ func (receiver StatDB) CreateStat(statRequest request.StatRequest) error {
 	var id int
 	if err := stmt.QueryRow(statRequest.Endpoint).Scan(&id); err != nil {
 		return err
-	}
-
-	if id == 0 {
-		return errors.New("invalid endpoint")
 	}
 
 	stmt, err = receiver.DB.Prepare("INSERT INTO stat (visited, fk_endpoint) VALUES (?, ?);")
