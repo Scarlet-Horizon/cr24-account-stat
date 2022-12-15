@@ -6,7 +6,9 @@ import (
 	"main/model"
 	_ "main/model"
 	"main/response"
+	"main/util"
 	"net/http"
+	"time"
 )
 
 type AccountController struct {
@@ -32,7 +34,18 @@ func (receiver AccountController) Create(ctx *gin.Context) {
 		return
 	}
 
-	err := receiver.DB.Create(account)
+	_, err := time.Parse("2006-01-02 15:04:05", account.OpenDate)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, response.ErrorResponse{Error: "invalid openDate format, use YYYY-MM-DD hh:mm:ss"})
+		return
+	}
+
+	if !util.IsValidUUID(account.SK) {
+		ctx.JSON(http.StatusBadRequest, response.ErrorResponse{Error: "invalid account id"})
+		return
+	}
+
+	err = receiver.DB.Create(account)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, response.ErrorResponse{Error: err.Error()})
 		return

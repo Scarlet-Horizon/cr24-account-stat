@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"log"
 	"main/model"
-	"time"
 )
 
 type AccountDB struct {
@@ -29,7 +28,7 @@ func (receiver AccountDB) Create(account model.Account) error {
 
 	stmt, err = receiver.DB.Prepare("INSERT INTO account VALUES (?, ?, ?, ?);")
 
-	_, err = stmt.Exec(account.PK, account.SK, account.OpenDate.Format("2006-01-02 15:04:05"), account.Type)
+	_, err = stmt.Exec(account.PK, account.SK, account.OpenDate, account.Type)
 	return err
 }
 
@@ -44,16 +43,9 @@ func (receiver AccountDB) GetAccount() (model.Account, error) {
 		}
 	}(stmt)
 
-	var openDate string
 	var account model.Account
-	if err := stmt.QueryRow().Scan(&account.PK, &account.SK, &openDate, &account.Type); err != nil {
+	if err := stmt.QueryRow().Scan(&account.PK, &account.SK, &account.OpenDate, &account.Type); err != nil {
 		return model.Account{}, err
 	}
-
-	account.OpenDate, err = time.Parse("2006-01-02 15:04:05", openDate)
-	if err != nil {
-		return model.Account{}, err
-	}
-
 	return account, nil
 }

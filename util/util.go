@@ -4,12 +4,18 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
+	"github.com/google/uuid"
 	"main/response"
 	"net/http"
 	"os"
 	"strings"
 	"time"
 )
+
+func IsValidUUID(u string) bool {
+	_, err := uuid.Parse(u)
+	return err == nil
+}
 
 func CORS(context *gin.Context) {
 	context.Header("Access-Control-Allow-Origin", "*")
