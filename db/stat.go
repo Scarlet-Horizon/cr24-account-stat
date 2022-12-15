@@ -82,3 +82,45 @@ func (receiver StatDB) LastEndpoint() ([]response.EndpointLast, error) {
 	}
 	return last, nil
 }
+
+func (receiver StatDB) MostCalled() ([]response.EndpointMostCalled, error) {
+	stmt, err := receiver.DB.Prepare("SELECT e.name, COUNT(e.id_endpoint) FROM endpoint e" +
+		" JOIN stat s on e.id_endpoint = s.fk_endpoint" +
+		" GROUP BY e.id_endpoint" + "" +
+		" HAVING COUNT(e.id_endpoint) = (SELECT MAX(count) FROM endpointCount);")
+	if err != nil {
+		return nil, err
+	}
+	defer func(stmt *sql.Stmt) {
+		if err := stmt.Close(); err != nil {
+			log.Printf("stmt.Close() error: %v", err)
+		}
+	}(stmt)
+
+	rows, err := stmt.Query()
+	if err != nil {
+		return nil, err
+	}
+	defer func(rows *sql.Rows) {
+		if err := rows.Close(); err != nil {
+			log.Printf("rows.Close() error: %v", err)
+		}
+	}(rows)
+
+	var mostCalled []response.EndpointMostCalled
+
+	for rows.Next() {
+		var result response.EndpointMostCalled
+
+		if err := rows.Scan(&result.Name, &result.Count); err != nil {
+			log.Printf("rows.Scan() error: %v", err)
+			continue
+		}
+
+		mostCalled = append(mostCalled, result)
+	}
+	if err := rows.Err(); err != nil {
+		log.Printf("rows.Err() error: %v", err)
+	}
+	return mostCalled, nil
+}

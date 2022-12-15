@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"database/sql"
 	"github.com/gin-gonic/gin"
 	"main/db"
 	"main/request"
@@ -21,6 +22,10 @@ func (receiver StatController) CreateStat(ctx *gin.Context) {
 
 	err := receiver.DB.CreateStat(req)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			ctx.JSON(http.StatusBadRequest, response.ErrorResponse{Error: "invalid endpoint"})
+			return
+		}
 		ctx.JSON(http.StatusInternalServerError, response.ErrorResponse{Error: err.Error()})
 		return
 	}
@@ -34,4 +39,13 @@ func (receiver StatController) LastEndpoint(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, last)
+}
+
+func (receiver StatController) MostCalled(ctx *gin.Context) {
+	most, err := receiver.DB.MostCalled()
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, response.ErrorResponse{Error: err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, most)
 }
