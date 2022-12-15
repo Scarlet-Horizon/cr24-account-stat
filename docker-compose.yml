@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+  api:
+    build: .
+    ports:
+      - "8090:8090"
+    networks:
+      - sipia_rv1_4
+    container_name: account-stat-con
+    hostname: account-stat
+    restart: on-failure
+
+networks:
+  sipia_rv1_4:
+    name: sipia_rv1_4
+    driver: bridge
