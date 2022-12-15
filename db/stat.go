@@ -5,6 +5,7 @@ import (
 	"errors"
 	"log"
 	"main/request"
+	"time"
 )
 
 type StatDB struct {
@@ -32,11 +33,11 @@ func (receiver StatDB) CreateStat(statRequest request.StatRequest) error {
 		return errors.New("invalid endpoint")
 	}
 
-	stmt, err = receiver.DB.Prepare("INSERT INTO stat (fk_endpoint) VALUES (?);")
+	stmt, err = receiver.DB.Prepare("INSERT INTO stat (visited, fk_endpoint) VALUES (?, ?);")
 	if err != nil {
 		return err
 	}
 
-	_, err = stmt.Exec(id)
+	_, err = stmt.Exec(time.Now().Format("2006-01-02 15-01-05"), id)
 	return err
 }
