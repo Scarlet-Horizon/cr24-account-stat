@@ -60,11 +60,18 @@ func main() {
 		},
 	}
 
+	accountController := controller.AccountController{
+		DB: &db.AccountDB{
+			DB: mysqlDB,
+		},
+	}
+
 	router := gin.Default()
 	router.Use(util.CORS)
 	api := router.Group("api/v1").Use(util.ValidateToken)
 	{
 		api.POST("/stat", statController.CreateStat)
+		api.POST("/account", accountController.Create)
 
 		api.GET("/last", statController.LastEndpoint)
 		api.GET("/most", statController.MostCalled)

@@ -26,7 +26,6 @@ CREATE TABLE account
 (
     id_account VARCHAR(255) NOT NULL PRIMARY KEY,
     id_user    VARCHAR(255) NOT NULL,
-    acc_limit  INT UNSIGNED NOT NULL,
     openDate   DATETIME     NOT NULL,
     acc_type   VARCHAR(255) NOT NULL
 );
