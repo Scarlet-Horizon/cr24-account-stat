@@ -18,7 +18,7 @@ CREATE TABLE endpoint
 CREATE TABLE stat
 (
     id_stat     INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    visited     DATETIME DEFAULT (DATE_FORMAT(NOW(), "%Y-%m-%d %H:%i")),
+    visited     DATETIME NOT NULL,
     fk_endpoint INT UNSIGNED NOT NULL
 );
 
@@ -27,7 +27,7 @@ CREATE TABLE account
     id_account VARCHAR(255) NOT NULL PRIMARY KEY,
     id_user    VARCHAR(255) NOT NULL,
     acc_limit  INT UNSIGNED NOT NULL,
-    openDate   DATETIME DEFAULT (DATE_FORMAT(NOW(), "%Y-%m-%d %H:%i")),
+    openDate   DATETIME NOT NULL,
     acc_type   VARCHAR(255) NOT NULL
 );
 
