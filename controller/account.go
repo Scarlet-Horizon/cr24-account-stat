@@ -26,3 +26,12 @@ func (receiver AccountController) Create(ctx *gin.Context) {
 	}
 	ctx.Status(http.StatusCreated)
 }
+
+func (receiver AccountController) Get(ctx *gin.Context) {
+	acc, err := receiver.DB.GetAccount()
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, response.ErrorResponse{Error: err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, acc)
+}

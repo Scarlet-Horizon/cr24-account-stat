@@ -3,6 +3,7 @@ package db
 import (
 	"database/sql"
 	"log"
+	"main/model"
 	"main/request"
 	"time"
 )
@@ -31,4 +32,29 @@ func (receiver AccountDB) Create(account request.Account) error {
 
 	_, err = stmt.Exec(account.PK, account.SK, time.Now().Format("2006-01-02 15:04:05"), account.Type)
 	return err
+}
+
+func (receiver AccountDB) GetAccount() (model.Account, error) {
+	stmt, err := receiver.DB.Prepare("SELECT * FROM account;")
+	if err != nil {
+		return model.Account{}, err
+	}
+	defer func(stmt *sql.Stmt) {
+		if err := stmt.Close(); err != nil {
+			log.Printf("stmt.Close() error: %v", err)
+		}
+	}(stmt)
+
+	var openDate string
+	var account model.Account
+	if err := stmt.QueryRow().Scan(&account.PK, &account.SK, &openDate, &account.Type); err != nil {
+		return model.Account{}, err
+	}
+
+	account.OpenDate, err = time.Parse("2006-01-02 15:04:05", openDate)
+	if err != nil {
+		return model.Account{}, err
+	}
+
+	return account, nil
 }
