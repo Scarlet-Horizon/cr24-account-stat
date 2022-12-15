@@ -27,7 +27,7 @@ CREATE TABLE account
     id_account VARCHAR(255) NOT NULL PRIMARY KEY,
     id_user    VARCHAR(255) NOT NULL,
     acc_limit  INT UNSIGNED NOT NULL,
-    openDate   DATETIME NOT NULL,
+    openDate   DATETIME     NOT NULL,
     acc_type   VARCHAR(255) NOT NULL
 );
 
@@ -47,3 +47,9 @@ VALUES ("api/v1/account"),
        ("api/v1/account/:accountID/withdraw"),
        ("api/v1/account/:accountID/close"),
        ("api/v1/account/:accountID");
+
+CREATE VIEW endpointCount AS
+SELECT e.name, COUNT(e.id_endpoint) 'count'
+FROM endpoint e
+         JOIN stat s on e.id_endpoint = s.fk_endpoint
+GROUP BY e.id_endpoint;
