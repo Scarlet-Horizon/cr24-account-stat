@@ -68,6 +68,7 @@ func main() {
 
 		api.GET("/last", statController.LastEndpoint)
 		api.GET("/most", statController.MostCalled)
+		api.GET("/all", statController.All)
 	}
 
 	srv := &http.Server{

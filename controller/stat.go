@@ -49,3 +49,12 @@ func (receiver StatController) MostCalled(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, most)
 }
+
+func (receiver StatController) All(ctx *gin.Context) {
+	all, err := receiver.DB.EndpointAll()
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, response.ErrorResponse{Error: err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, all)
+}

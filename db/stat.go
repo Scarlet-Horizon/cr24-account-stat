@@ -39,7 +39,7 @@ func (receiver StatDB) CreateStat(statRequest request.StatRequest) error {
 		return err
 	}
 
-	_, err = stmt.Exec(time.Now().Format("2006-01-02 15-01-05"), id)
+	_, err = stmt.Exec(time.Now().Format("2006-01-02 15:04:05"), id)
 	return err
 }
 
@@ -83,11 +83,8 @@ func (receiver StatDB) LastEndpoint() ([]response.EndpointLast, error) {
 	return last, nil
 }
 
-func (receiver StatDB) MostCalled() ([]response.EndpointMostCalled, error) {
-	stmt, err := receiver.DB.Prepare("SELECT e.name, COUNT(e.id_endpoint) FROM endpoint e" +
-		" JOIN stat s on e.id_endpoint = s.fk_endpoint" +
-		" GROUP BY e.id_endpoint" + "" +
-		" HAVING COUNT(e.id_endpoint) = (SELECT MAX(count) FROM endpointCount);")
+func (receiver StatDB) mostAndAll(query string) ([]response.EndpointStat, error) {
+	stmt, err := receiver.DB.Prepare(query)
 	if err != nil {
 		return nil, err
 	}
@@ -107,20 +104,31 @@ func (receiver StatDB) MostCalled() ([]response.EndpointMostCalled, error) {
 		}
 	}(rows)
 
-	var mostCalled []response.EndpointMostCalled
+	var data []response.EndpointStat
 
 	for rows.Next() {
-		var result response.EndpointMostCalled
+		var result response.EndpointStat
 
 		if err := rows.Scan(&result.Name, &result.Count); err != nil {
 			log.Printf("rows.Scan() error: %v", err)
 			continue
 		}
 
-		mostCalled = append(mostCalled, result)
+		data = append(data, result)
 	}
 	if err := rows.Err(); err != nil {
 		log.Printf("rows.Err() error: %v", err)
 	}
-	return mostCalled, nil
+	return data, nil
+}
+
+func (receiver StatDB) MostCalled() ([]response.EndpointStat, error) {
+	return receiver.mostAndAll("SELECT e.name, COUNT(e.id_endpoint) count FROM endpoint e" +
+		" JOIN stat s on e.id_endpoint = s.fk_endpoint" +
+		" GROUP BY e.id_endpoint" + "" +
+		" HAVING COUNT(e.id_endpoint) = (SELECT MAX(count) FROM endpointCount);")
+}
+
+func (receiver StatDB) EndpointAll() ([]response.EndpointStat, error) {
+	return receiver.mostAndAll("SELECT * FROM endpointCount ORDER BY count DESC;")
 }

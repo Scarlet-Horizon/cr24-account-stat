@@ -10,7 +10,7 @@ type EndpointLast struct {
 	Visited string `json:"visited" example:"2022-12-15 13:17:25"`
 }
 
-type EndpointMostCalled struct {
+type EndpointStat struct {
 	Name  string `json:"name" example:"api/v1/account"`
 	Count int    `json:"count" example:"5"`
 }
