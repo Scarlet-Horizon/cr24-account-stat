@@ -56,7 +56,6 @@ func (receiver StatDB) LastEndpoint() ([]response.EndpointLast, error) {
 	}(stmt)
 
 	rows, err := stmt.Query()
-
 	if err != nil {
 		return nil, err
 	}

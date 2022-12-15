@@ -65,6 +65,8 @@ func main() {
 	api := router.Group("api/v1").Use(util.ValidateToken)
 	{
 		api.POST("/stat", statController.CreateStat)
+		
+		api.GET("/last", statController.LastEndpoint)
 	}
 
 	srv := &http.Server{

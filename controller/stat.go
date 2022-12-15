@@ -26,3 +26,12 @@ func (receiver StatController) CreateStat(ctx *gin.Context) {
 	}
 	ctx.Status(http.StatusCreated)
 }
+
+func (receiver StatController) LastEndpoint(ctx *gin.Context) {
+	last, err := receiver.DB.LastEndpoint()
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, response.ErrorResponse{Error: err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, last)
+}
