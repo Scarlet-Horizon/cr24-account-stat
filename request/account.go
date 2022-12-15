@@ -7,4 +7,4 @@ type Account struct {
 	SK string `json:"accountID" example:"09130407-1f81-4ac5-be85-6557683462d0"`
 	// The opening date for the account
 	Type string `json:"type" example:"checking" enums:"checking,saving"`
-} //@name Account
+} //	@name	Account
