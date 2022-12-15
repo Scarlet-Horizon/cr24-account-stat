@@ -12,6 +12,7 @@ type StatDB struct {
 }
 
 func (receiver StatDB) CreateStat(statRequest request.StatRequest) error {
+	// TODO create own endpoint db model
 	stmt, err := receiver.DB.Prepare("SELECT id_endpoint FROM endpoint WHERE name = ?;")
 	if err != nil {
 		return err
