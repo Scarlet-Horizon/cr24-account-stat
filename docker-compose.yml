@@ -10,6 +10,10 @@ services:
     container_name: account-stat-con
     hostname: account-stat
     restart: on-failure
+    deploy:
+      resources:
+        limits:
+          memory: 50M
 
 networks:
   sipia_rv1_4:

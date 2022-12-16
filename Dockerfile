@@ -8,8 +8,8 @@ RUN go mod init main && go mod tidy
 
 RUN go mod download
 
-RUN CGO_ENABLED=0 go build -o account-stat main.go
+RUN CGO_ENABLED=0 go build main.go
 
 ENV GIN_MODE=release
 
-CMD ["./account-stat"]
+CMD ["./main"]
