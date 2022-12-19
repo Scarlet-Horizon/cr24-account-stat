@@ -38,14 +38,14 @@ ALTER TABLE stat
             ON DELETE CASCADE;
 
 INSERT INTO endpoint (name)
-VALUES ("api/v1/account"),
-       ("api/v1/accounts/:type"),
-       ("api/v1//accounts/:type/transactions"),
-       ("api/v1/account/:accountID"),
-       ("api/v1/account/:accountID/deposit"),
-       ("api/v1/account/:accountID/withdraw"),
-       ("api/v1/account/:accountID/close"),
-       ("api/v1/account/:accountID");
+VALUES ("/api/v1/account"),
+       ("/api/v1/accounts/:type"),
+       ("/api/v1//accounts/:type/transactions"),
+       ("/api/v1/account/:accountID"),
+       ("/api/v1/accoqunt/:accountID/deposit"),
+       ("/api/v1/account/:accountID/withdraw"),
+       ("/api/v1/account/:accountID/close"),
+       ("/api/v1/account/:accountID");
 
 CREATE VIEW endpointCount AS
 SELECT e.name, COUNT(e.id_endpoint) 'count'
