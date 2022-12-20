@@ -42,7 +42,7 @@ VALUES ("/api/v1/account"),
        ("/api/v1/accounts/:type"),
        ("/api/v1//accounts/:type/transactions"),
        ("/api/v1/account/:accountID"),
-       ("/api/v1/accoqunt/:accountID/deposit"),
+       ("/api/v1/account/:accountID/deposit"),
        ("/api/v1/account/:accountID/withdraw"),
        ("/api/v1/account/:accountID/close"),
        ("/api/v1/account/:accountID");
